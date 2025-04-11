@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 
 
 verbose = False
+old_naming_scheme = False
 
 
 def sanitize_file_name(file_name):
@@ -85,15 +86,20 @@ def extract_disc_serial(data, sanitize):
 
 
 def handle_args():
-    if len(sys.argv) > 1:
-        if sys.argv[1] == "--v" or sys.argv[1] == "-v":
+    if len(sys.argv) > 1 and sys.argv[1] == "--" or sys.argv[1] == "-h":
+        print("Usage: python opl-rom-tools.py [--v|--h]")
+        print("Options: --o, -o: Use old naming scheme")
+        print("         --v, -v: Enable verbose mode")
+        print("         --h, -h: Show this help message")
+        exit(0)
+
+    for arg in sys.argv:
+        if arg == "--o" or arg == "-o":
+            global old_naming_scheme
+            old_naming_scheme = True
+        if arg == "--v" or arg == "-v":
             global verbose
             verbose = True
-        if sys.argv[1] == "--h" or sys.argv[1] == "-h":
-            print("Usage: python opl-rom-tools.py [--v|--h]")
-            print("Options: --v, -v: Enable verbose mode")
-            print("         --h, -h: Show this help message")
-            exit(0)
 
 
 def main():
@@ -123,13 +129,20 @@ def main():
             continue
 
         game_name = sanitize_file_name(game_name)
-        new_file_name = f"{disc_serial_raw}.{game_name}.iso"
 
-        os.rename(iso_file, new_file_name)
-        if verbose: print(f"[+] Renamed file: {iso_file} => {new_file_name}")
+        if old_naming_scheme:
+            new_file_name = f"{disc_serial_raw}.{game_name}.iso"
+        else:
+            new_file_name = f"{game_name}.iso"
 
-        if len(game_name) > 32:
-            print("[*] Game name exceeds 32 characters. Consider renaming it manually.")
+        try:
+            os.rename(iso_file, new_file_name)
+            if verbose: print(f"[+] Renamed file: {iso_file} => {new_file_name}")
+
+            if len(game_name) > 32:
+                print("[*] Game name exceeds 32 characters. Consider renaming it manually.")
+        except Exception as e:
+            print(f"[!] Error occurred while renaming file => {e}")
 
 
 if __name__ == "__main__":

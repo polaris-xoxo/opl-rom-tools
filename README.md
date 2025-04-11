@@ -14,12 +14,13 @@ python opl-rom-tools.py [options]
 ## Options
 | Option   | Effect |
 |----------| ------ |
+| -o / --o | use the old naming scheme |
 | -v / --v | verbose output |
 | -h / --h | display help message |
 
 ## How does it work?
 The script attempts to extract the game serial from each iso file and looks it up on [Redump](http://redump.org).
-After that it renames each file to *&lt;game serial&gt;*.*&lt;game name&gt;*.iso.
+After that it renames each file to *&lt;game name&gt;*.iso (unless ```-o / --o``` is being used, then it will be *&lt;game serial&gt;*.*&lt;game name&gt;*.iso.
 
 ## What now
 I might add cover art downloading / copying at some point if I feel like it, not sure yet.
