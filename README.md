@@ -11,6 +11,8 @@ Copy the script to your rom storage folder and run the following command in a te
 ```
 python opl-rom-tools.py [options]
 ```
+To use the artwork copy feature, point it to one of [those](https://archive.org/details/oplm-128x128) massive ps2 artwork folders as the source, and your opl media's *ART* directory as the destination.
+The script will only copy artwork for games present to avoid having a ton of stray files on your drive.
 ## Options
 | Option   | Effect                     |
 |----------|----------------------------|
@@ -25,7 +27,7 @@ The script attempts to extract the game serial from each iso file and looks it u
 After that it renames each file to *&lt;game name&gt;*.iso (unless ```-o / --o``` is being used, then it will be *&lt;game serial&gt;*.*&lt;game name&gt;*.iso.
 
 ## What now
-I might add cover art downloading / copying at some point if I feel like it, not sure yet.
+I might add cover art downloading at some point if I feel like it, not sure yet.
 
 ## This code sucks lmao!
 Probably, i barely ever touch python.

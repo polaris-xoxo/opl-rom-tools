@@ -95,7 +95,7 @@ def copy_artwork_files(disc_serial, src, dst):
         art_files = [f for f in os.listdir(src) if f.startswith(disc_serial)]
 
         if not art_files:
-            print(f"[*] No artwork files found for {disc_serial}")
+            print(f"[>] No artwork files found for {disc_serial}")
             return
 
         for art in art_files:
@@ -106,7 +106,7 @@ def copy_artwork_files(disc_serial, src, dst):
         print(f"[!] Error occurred while copying artwork => {e}")
 
 
-def rename_iso_file(disc_serial_sanitized, disc_serial_raw, iso_file):
+def rename_iso_file(disc_serial_raw, disc_serial_sanitized, iso_file):
     game_name = get_game_name_by_serial(disc_serial_sanitized)
     if not game_name:
         return
@@ -123,7 +123,7 @@ def rename_iso_file(disc_serial_sanitized, disc_serial_raw, iso_file):
         if verbose: print(f"[+] Renamed file: {iso_file} => {new_file_name}")
 
         if len(game_name) > 32:
-            print("[*] Game name exceeds 32 characters. Consider renaming it manually.")
+            print("[>] Game name exceeds 32 characters. Consider renaming it manually.")
     except Exception as e:
         print(f"[!] Error occurred while renaming file => {e}")
 
@@ -138,22 +138,23 @@ def handle_args():
         print("         --h, -h: Show this help message")
         exit(0)
 
+    global rename_files
+    global copy_artwork
+    global src_artwork_directory
+    global dst_artwork_directory
+    global old_naming_scheme
+    global verbose
+
     for arg in sys.argv:
         if arg == "--r" or arg == "-r":
-            global rename_files
             rename_files = True
         if arg == "--c" or arg == "-c":
-            global copy_artwork
-            global src_artwork_directory
-            global dst_artwork_directory
             copy_artwork = True
-            src_artwork_directory = input("Enter source artwork directory: ").strip()
-            dst_artwork_directory = input("Enter destination artwork directory: ").strip()
+            src_artwork_directory = input("[?] Enter source artwork directory: ").strip()
+            dst_artwork_directory = input("[?] Enter destination artwork directory: ").strip()
         if arg == "--o" or arg == "-o":
-            global old_naming_scheme
             old_naming_scheme = True
         if arg == "--v" or arg == "-v":
-            global verbose
             verbose = True
 
 
@@ -162,7 +163,6 @@ def main():
 
     current_directory = os.getcwd()
     iso_files = [f for f in os.listdir(current_directory) if f.endswith('.iso')]
-
     if not iso_files:
         print("[!] No ISO files found in the current directory")
         return
@@ -180,7 +180,7 @@ def main():
             continue
 
         if rename_files:
-            rename_iso_file(disc_serial_sanitized, disc_serial_raw, iso_file)
+            rename_iso_file(disc_serial_raw, disc_serial_sanitized, iso_file)
 
         if copy_artwork:
             copy_artwork_files(disc_serial_raw, src_artwork_directory, dst_artwork_directory)
