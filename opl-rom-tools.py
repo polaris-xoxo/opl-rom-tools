@@ -5,7 +5,9 @@ import pycdlib
 import requests
 from bs4 import BeautifulSoup
 
+
 verbose = False
+
 
 def sanitize_file_name(file_name):
     return re.sub(r'[<>:"/\\|?*]', '', file_name)

@@ -21,3 +21,5 @@ I might add cover art downloading / copying at some point if I feel like it, not
 
 ## This code sucks lmao!
 Probably, i barely ever touch python.
+
+![Cat laughing about your failures](/img/point_and_laugh.jpg)
