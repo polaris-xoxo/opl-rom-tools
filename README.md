@@ -1,6 +1,11 @@
 ## Why
 I got fed up with OPL Manager's wonky rename function and decided to write my own script for it.
 
+## Installing dependencies
+```
+pip install bs4 pycdlib requests
+```
+
 ## Usage
 Copy the script to your rom storage folder and run the following command in a terminal of your choice.
 ```
