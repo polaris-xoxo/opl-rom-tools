@@ -12,13 +12,13 @@ Copy the script to your rom storage folder and run the following command in a te
 python opl-rom-tools.py [options]
 ```
 ## Options
-| Option   | Effect |
-|----------| ------ |
-| -r / --r | Rename ISO Files |
+| Option   | Effect                     |
+|----------|----------------------------|
+| -r / --r | Rename ISO Files           |
 | -c / --c | Find and copy game artwork |
-| -o / --o | use the old naming scheme |
-| -v / --v | verbose output |
-| -h / --h | display help message |
+| -o / --o | Use the old naming scheme  |
+| -v / --v | Verbose output             |
+| -h / --h | Display help message       |
 
 ## How does it work?
 The script attempts to extract the game serial from each iso file and looks it up on [Redump](http://redump.org).

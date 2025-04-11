@@ -105,6 +105,7 @@ def copy_artwork_files(disc_serial, src, dst):
     except Exception as e:
         print(f"[!] Error occurred while copying artwork => {e}")
 
+
 def rename_iso_file(disc_serial_sanitized, disc_serial_raw, iso_file):
     game_name = get_game_name_by_serial(disc_serial_sanitized)
     if not game_name:
@@ -125,6 +126,7 @@ def rename_iso_file(disc_serial_sanitized, disc_serial_raw, iso_file):
             print("[*] Game name exceeds 32 characters. Consider renaming it manually.")
     except Exception as e:
         print(f"[!] Error occurred while renaming file => {e}")
+
 
 def handle_args():
     if len(sys.argv) < 2 or sys.argv[1] == "--h" or sys.argv[1] == "-h":
