@@ -9,14 +9,18 @@ from bs4 import BeautifulSoup
 
 verbose = False
 rename_files = False
+rename_strict = False
 copy_artwork = False
 old_naming_scheme = False
 src_artwork_directory = None
 dst_artwork_directory = None
 
 
-def sanitize_file_name(file_name):
-    return re.sub(r'[<>:"/\\|?*]', '', file_name)
+def sanitize_file_name(file_name, strict=False):
+    if strict:
+        return re.sub(r'[^a-zA-Z0-9_\-\[\]() ]', '', file_name)
+    else:
+        return re.sub(r'[<>:"/\\|?*]', '', file_name)
 
 
 def get_game_name_by_serial(serial):
@@ -70,7 +74,7 @@ def read_system_config_from_iso(iso_path):
         return None
 
 
-def extract_disc_serial(data, sanitize):
+def extract_disc_serial(data, sanitize=False):
     try:
         boot2_value = re.search(r'cdrom0:\\([A-Za-z0-9_.]+)', data[0])
 
@@ -101,7 +105,6 @@ def copy_artwork_files(disc_serial, src, dst):
         for art in art_files:
             shutil.copyfile(os.path.join(src, art), os.path.join(dst, art))
             if verbose: print(f"[+] Copied artwork file: {art}")
-
     except Exception as e:
         print(f"[!] Error occurred while copying artwork => {e}")
 
@@ -111,7 +114,7 @@ def rename_iso_file(disc_serial_raw, disc_serial_sanitized, iso_file):
     if not game_name:
         return
 
-    game_name = sanitize_file_name(game_name)
+    game_name = sanitize_file_name(game_name, rename_strict)
 
     if old_naming_scheme:
         new_file_name = f"{disc_serial_raw}.{game_name}.iso"
@@ -132,6 +135,7 @@ def handle_args():
     if len(sys.argv) < 2 or sys.argv[1] == "--h" or sys.argv[1] == "-h":
         print("Usage: python opl-rom-tools.py [options]")
         print("Options: --r, -r: Rename ISO files")
+        print("         --s, -s: Enforce strict file naming rules")
         print("         --c, -c: Copy artwork files")
         print("         --o, -o: Use old naming scheme")
         print("         --v, -v: Enable verbose mode")
@@ -139,6 +143,7 @@ def handle_args():
         exit(0)
 
     global rename_files
+    global rename_strict
     global copy_artwork
     global src_artwork_directory
     global dst_artwork_directory
@@ -148,6 +153,8 @@ def handle_args():
     for arg in sys.argv:
         if arg == "--r" or arg == "-r":
             rename_files = True
+        if arg == "--s" or arg == "-s":
+            rename_strict = True
         if arg == "--c" or arg == "-c":
             copy_artwork = True
             src_artwork_directory = input("[?] Enter source artwork directory: ").strip()
@@ -174,7 +181,7 @@ def main():
         if not system_cnf:
             continue
 
-        disc_serial_raw = extract_disc_serial(system_cnf, False)
+        disc_serial_raw = extract_disc_serial(system_cnf)
         disc_serial_sanitized = extract_disc_serial(system_cnf, True)
         if not disc_serial_raw or not disc_serial_sanitized:
             continue
