@@ -86,8 +86,8 @@ def extract_disc_serial(data, sanitize):
 
 
 def handle_args():
-    if len(sys.argv) > 1 and sys.argv[1] == "--" or sys.argv[1] == "-h":
-        print("Usage: python opl-rom-tools.py [--v|--h]")
+    if len(sys.argv) > 1 and sys.argv[1] == "--h" or sys.argv[1] == "-h":
+        print("Usage: python opl-rom-tools.py [options]")
         print("Options: --o, -o: Use old naming scheme")
         print("         --v, -v: Enable verbose mode")
         print("         --h, -h: Show this help message")
