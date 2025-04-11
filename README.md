@@ -17,9 +17,10 @@ The script will only copy artwork for games present to avoid having a ton of str
 | Option   | Effect                                                                             |
 |----------|------------------------------------------------------------------------------------|
 | -r / --r | Rename ISO Files                                                                   |
-| -s / --s | Enforce strict naming rules ```(a-z, A-Z, 0-9, ., _, -, [], () and spaces only)``` |
-| -c / --c | Find and copy game artwork                                                         |
 | -o / --o | Use the old naming scheme                                                          |
+| -s / --s | Enforce strict naming rules ```(a-z, A-Z, 0-9, ., _, -, [], () and spaces only)``` |
+| -t / --t | Truncate game names to 32 characters                                               |
+| -c / --c | Find and copy game artwork                                                         |
 | -v / --v | Verbose output                                                                     |
 | -h / --h | Display help message                                                               |
 

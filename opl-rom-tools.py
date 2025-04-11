@@ -10,8 +10,9 @@ from bs4 import BeautifulSoup
 verbose = False
 rename_files = False
 rename_strict = False
+rename_truncate = False
 copy_artwork = False
-old_naming_scheme = False
+rename_old_scheme = False
 src_artwork_directory = None
 dst_artwork_directory = None
 
@@ -116,17 +117,21 @@ def rename_iso_file(disc_serial_raw, disc_serial_sanitized, iso_file):
 
     game_name = sanitize_file_name(game_name, rename_strict)
 
-    if old_naming_scheme:
-        new_file_name = f"{disc_serial_raw}.{game_name}.iso"
-    else:
-        new_file_name = f"{game_name}.iso"
-
     try:
+        if len(game_name) > 32:
+            if rename_truncate:
+                game_name = game_name[:32]
+                if verbose: print(f"[+] Truncated game name to 32 characters => {game_name}")
+            else:
+                print("[>] Game name exceeds 32 characters. Consider renaming it manually or using the -t flag to truncate it automatically.")
+
+        if rename_old_scheme:
+            new_file_name = f"{disc_serial_raw}.{game_name}.iso"
+        else:
+            new_file_name = f"{game_name}.iso"
+
         os.rename(iso_file, new_file_name)
         if verbose: print(f"[+] Renamed file: {iso_file} => {new_file_name}")
-
-        if len(game_name) > 32:
-            print("[>] Game name exceeds 32 characters. Consider renaming it manually.")
     except Exception as e:
         print(f"[!] Error occurred while renaming file => {e}")
 
@@ -135,32 +140,36 @@ def handle_args():
     if len(sys.argv) < 2 or sys.argv[1] == "--h" or sys.argv[1] == "-h":
         print("Usage: python opl-rom-tools.py [options]")
         print("Options: --r, -r: Rename ISO files")
-        print("         --s, -s: Enforce strict file naming rules")
-        print("         --c, -c: Copy artwork files")
         print("         --o, -o: Use old naming scheme")
+        print("         --s, -s: Enforce strict file naming rules")
+        print("         --t, -t: Truncate game names to 32 characters")
+        print("         --c, -c: Copy artwork files")
         print("         --v, -v: Enable verbose mode")
         print("         --h, -h: Show this help message")
         exit(0)
 
     global rename_files
+    global rename_old_scheme
     global rename_strict
+    global rename_truncate
     global copy_artwork
     global src_artwork_directory
     global dst_artwork_directory
-    global old_naming_scheme
     global verbose
 
     for arg in sys.argv:
         if arg == "--r" or arg == "-r":
             rename_files = True
+        if arg == "--o" or arg == "-o":
+            rename_old_scheme = True
         if arg == "--s" or arg == "-s":
             rename_strict = True
+        if arg == "--t" or arg == "-t":
+            rename_truncate = True
         if arg == "--c" or arg == "-c":
             copy_artwork = True
             src_artwork_directory = input("[?] Enter source artwork directory: ").strip()
             dst_artwork_directory = input("[?] Enter destination artwork directory: ").strip()
-        if arg == "--o" or arg == "-o":
-            old_naming_scheme = True
         if arg == "--v" or arg == "-v":
             verbose = True
 
