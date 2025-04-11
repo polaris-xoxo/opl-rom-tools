@@ -14,6 +14,8 @@ python opl-rom-tools.py [options]
 ## Options
 | Option   | Effect |
 |----------| ------ |
+| -r / --r | Rename ISO Files |
+| -c / --c | Find and copy game artwork |
 | -o / --o | use the old naming scheme |
 | -v / --v | verbose output |
 | -h / --h | display help message |
